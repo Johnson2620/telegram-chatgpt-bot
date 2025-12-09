@@ -8,22 +8,24 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 
+# /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     await update.message.reply_text(
         f"Assalomu alaykum, {user.first_name}!\n"
-        "Savolingizni yozing, men yordam beraman."
+        "Savolingizni yuboring — men javob beraman."
     )
 
+# asosiy chatbot
 async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_msg = update.message.text
 
     try:
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4o-mini",
             messages=[
-                {"role": "system", "content": "O'zbekcha yordamchi bo‘l."},
-                {"role": "user", "content": user_msg},
+                {"role": "system", "content": "Sen o‘zbek tilida yordam beradigan chatbotsan."},
+                {"role": "user", "content": user_msg}
             ]
         )
 
@@ -31,14 +33,18 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(answer)
 
     except Exception as e:
-        await update.message.reply_text("Xatolik yuz berdi.")
-        print("ERROR:", e)
+        print("Xatolik:", e)
+        await update.message.reply_text("Xatolik yuz berdi, keyinroq urinib ko‘ring.")
 
-async def main():
+# ❗❗❗ BU YERGA E’TIBOR:
+# asyncio.run() YO‘Q
+def main():
     app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
+
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, chat))
-    await app.run_polling()
 
-import asyncio
-asyncio.run(main())
+    app.run_polling()   # ← bu o‘zi loop ochadi
+
+if __name__ == "__main__":
+    main()
