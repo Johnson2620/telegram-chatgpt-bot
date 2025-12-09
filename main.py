@@ -36,8 +36,6 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
         print("Xatolik:", e)
         await update.message.reply_text("Xatolik yuz berdi, keyinroq urinib ko‘ring.")
 
-# ❗❗❗ BU YERGA E’TIBOR:
-# asyncio.run() YO‘Q
 def main():
     app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
 
@@ -48,3 +46,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
