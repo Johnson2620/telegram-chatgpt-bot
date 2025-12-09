@@ -12,8 +12,7 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     await update.message.reply_text(
-        f"Assalomu alaykum, {user.first_name}!\n"
-        "Savolingizni yuboring — men javob beraman."
+        f"Assalomu alaykum, {user.first_name}!\nSavolingizni yuboring — men javob beraman."
     )
 
 # asosiy chatbot
@@ -29,7 +28,7 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
             ]
         )
 
-        answer = response.choices[0].message["content"]
+        answer = response.choices[0].message.content
         await update.message.reply_text(answer)
 
     except Exception as e:
@@ -42,8 +41,7 @@ def main():
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, chat))
 
-    app.run_polling()   # ← bu o‘zi loop ochadi
+    app.run_polling()
 
 if __name__ == "__main__":
     main()
-
